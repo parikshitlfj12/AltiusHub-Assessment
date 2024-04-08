@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Functionalities working - 
+- Navbar and sidebar.
+- List component for invoices
+- Alter invoice modal to add or edit.
+- Adding a new invoice functionality working.
+
 ## Prerequisite - 
 Node installed in your machine
 
