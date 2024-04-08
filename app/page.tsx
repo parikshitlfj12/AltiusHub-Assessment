@@ -52,8 +52,9 @@ export default function Home() {
     },
   ]);
 
-  const addInvoice = (invoice: Invoice) => {
-    setInvoices([...invoices, invoice]);
+  const addInvoice = (newInv: Invoice) => {
+    setInvoices([...invoices, newInv]);
+    setOpen(false);
   };
 
   const deleteInvoice = (invoice: Invoice) => {
@@ -63,7 +64,6 @@ export default function Home() {
   const handleAddInvoice = () => {
     setOpen(!open);
   };
-
 
   return (
     <main className={styles.main}>

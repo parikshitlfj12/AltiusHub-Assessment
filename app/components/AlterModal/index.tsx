@@ -8,6 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Accordion, AccordionSummary, Button, TextField } from "@mui/material";
 import { useState } from "react";
+import { generateRandomId } from "../../../utils/helper";
 
 const style = {
   position: "absolute" as "absolute",
@@ -51,20 +52,27 @@ export default function AlterModal({
     Date: Yup.string().required("Required"),
     InvoiceNumber: Yup.string().required("Required"),
     CustomerName: Yup.string().required("Required"),
-    BillingAddress: Yup.string().required("Required"),
     ShippingAddress: Yup.string().required("Required"),
     GSTIN: Yup.string().required("Required"),
-    Items: Yup.array().required("Required"),
-    BillSundrys: Yup.array().required("Required"),
     TotalAmount: Yup.number().required("Required"),
   });
 
   const onSubmit = (values: any) => {
-    console.log(values);
+    addInvoice({
+      Id: generateRandomId(8),
+      Date: "23-12-2024",
+      InvoiceNumber: generateRandomId(8),
+      CustomerName: invoice?.CustomerName,
+      BillingAddress: invoice?.BillingAddress,
+      ShippingAddress: invoice?.ShippingAddress,
+      GSTIN: invoice?.GSTIN,
+      Items: [],
+      BillSundrys: [],
+      TotalAmount: invoice?.TotalAmount,
+    });
   };
 
   const handleChange = (e: any) => {
-    console.log(e);
     setInvoice({
       ...invoice,
       [e.target.name]: e.target.value,
@@ -92,24 +100,8 @@ export default function AlterModal({
             ? "Edit the invoice details -"
             : "Create a new invoice"}
         </Typography>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
+        <Formik initialValues={initialValues} onSubmit={onSubmit}>
           <Form>
-            <div>
-              <TextField
-                fullWidth
-                sx={{ mt: 1 }}
-                label="Invoice Number"
-                variant="standard"
-                name="InvoiceNumber"
-                value={invoice?.InvoiceNumber}
-                onChange={handleChange}
-              />
-              <ErrorMessage name="InvoiceNumber" component="div" />
-            </div>
             <div>
               <TextField
                 fullWidth
@@ -224,7 +216,11 @@ export default function AlterModal({
                 Cancel
               </Button>
               {type == "EDIT" ? (
-                <Button variant="contained" color="error">
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => deleteInvoice(invoice)}
+                >
                   Delete
                 </Button>
               ) : null}
