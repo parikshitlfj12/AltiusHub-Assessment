@@ -1,95 +1,101 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import Sidebar from "./components/Sidebar";
 import styles from "./page.module.css";
+import { Invoice } from "./types";
+import InvoiceList from "./components/InvoiceList";
+import { Box, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import AlterModal from "./components/AlterModal";
 
 export default function Home() {
+  const [open, setOpen] = useState(false);
+  const [invoices, setInvoices] = useState<Invoice[]>([
+    {
+      Id: "#811-2341-1231",
+      Date: "2021-01-01",
+      InvoiceNumber: 1,
+      CustomerName: "Parikshit SIngh",
+      BillingAddress: "123 Main St",
+      ShippingAddress: "123 Main St",
+      GSTIN: "quygwhjbsnd",
+      Items: [
+        {
+          Id: "#811-2341-2",
+          itemName: "Uncle Chips",
+          quantity: 1,
+          price: 20,
+          amount: 20,
+        },
+        {
+          Id: "#811-2341-214",
+          itemName: "Creamy Lays",
+          quantity: 1,
+          price: 20,
+          amount: 20,
+        },
+      ],
+      BillSundrys: [],
+      TotalAmount: 765,
+    },
+    {
+      Id: "#561-241-5531",
+      Date: "2022-12-03",
+      InvoiceNumber: 2,
+      CustomerName: "Sourav Singh",
+      BillingAddress: "123 Main St",
+      ShippingAddress: "123 Main St",
+      GSTIN: "quygwhjbsnd",
+      Items: [],
+      BillSundrys: [],
+      TotalAmount: 3459,
+    },
+  ]);
+
+  const addInvoice = (invoice: Invoice) => {
+    setInvoices([...invoices, invoice]);
+  };
+
+  const deleteInvoice = (invoice: Invoice) => {
+    setInvoices(invoices.filter((i) => i.Id !== invoice.Id));
+  };
+
+  const handleAddInvoice = () => {
+    setOpen(!open);
+  };
+
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+      <Sidebar />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "8%",
+          px: 5,
+        }}
+      >
+        <Button
+          variant="contained"
+          color={"success"}
+          startIcon={<AddIcon />}
+          onClick={handleAddInvoice}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          Add
+        </Button>
+      </Box>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+      <Box sx={{ mt: 1 }}>
+        <InvoiceList invoices={invoices} />
+      </Box>
+      <AlterModal
+        open={open}
+        setOpen={setOpen}
+        type={"CREATE"}
+        addInvoice={addInvoice}
+        deleteInvoice={deleteInvoice}
+      />
     </main>
   );
 }
